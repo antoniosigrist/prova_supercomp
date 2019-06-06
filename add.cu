@@ -37,8 +37,9 @@ int main() {
    blocksize = 256;
 
    // Aloca vetores na memoria da CPU
-   h_a = (double *)cudaMallocManaged(n*sizeof(double));
-   h_b = (double *)cudaMallocManaged(n*sizeof(double));
+   cudaMallocManaged((double **)&h_a,n*sizeof(double));
+   cudaMallocManaged((double **)&h_b,n*sizeof(double));
+   
    h_c = (double *)malloc(n*sizeof(double));
 
 
