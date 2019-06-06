@@ -12,6 +12,17 @@ __global__ void add(double *a, double *b, double *c, int N) {
    }
 }
 
+__global__ void preenche(double *a, double *b, int N){
+
+   int i=blockIdx.x*blockDim.x+threadIdx.x;
+   if(i<N) {
+
+      a[i] = (double)i;
+      b[i] = (double)N-i;
+   }
+
+}
+
 /* Programa cria dois vetores e soma eles em GPU */
 int main() {
 
@@ -23,16 +34,22 @@ int main() {
 
    n=1<<23;
 
+   blocksize = 256;
+
    // Aloca vetores na memoria da CPU
-   h_a = (double *)malloc(n*sizeof(double));
-   h_b = (double *)malloc(n*sizeof(double));
+   h_a = (double *)cudaMallocManaged(n*sizeof(double));
+   h_b = (double *)cudaMallocManaged(n*sizeof(double));
    h_c = (double *)malloc(n*sizeof(double));
 
+
    // Preenche os vetores
-   for (i = 0; i < n; i++) {
-    h_a[i] = (double)i;
-    h_b[i] = (double)n-i;
-   }
+   // for (i = 0; i < n; i++) {
+   //  h_a[i] = (double)i;
+   //  h_b[i] = (double)n-i;
+   // }
+
+
+   preenche<<<((n-1)/256 + 1),blocksize>>>(h_a,h_b,n);
 
    // Aloca vetores na memoria da GPU
    error = cudaMalloc((void **)&d_a,n*sizeof(double));
@@ -68,7 +85,7 @@ int main() {
    }
 
    // Realiza calculo na GPU
-   blocksize = 256;
+   
    add<<<((n-1)/256 + 1),blocksize>>>(d_a,d_b,d_c,n);
 
    // Retorna valores da memoria da GPU para a CPU
