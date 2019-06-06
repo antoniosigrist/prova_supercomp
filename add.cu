@@ -39,7 +39,7 @@ int main() {
    // Aloca vetores na memoria da CPU
    cudaMallocManaged((double **)&h_a,n*sizeof(double));
    cudaMallocManaged((double **)&h_b,n*sizeof(double));
-   
+
    h_c = (double *)malloc(n*sizeof(double));
 
 
@@ -50,7 +50,7 @@ int main() {
    // }
 
 
-   preenche<<<((n-1)/256 + 1),blocksize>>>(h_a,h_b,n);
+   preenche<<<((n)/blocksize),blocksize>>>(h_a,h_b,n);
 
    // Aloca vetores na memoria da GPU
    error = cudaMalloc((void **)&d_a,n*sizeof(double));
