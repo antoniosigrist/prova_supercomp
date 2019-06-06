@@ -34,7 +34,7 @@ int main() {
 
    n=1<<23;
 
-   blocksize = 256;
+   blocksize = 512;
 
    // Aloca vetores na memoria da CPU
    cudaMallocManaged((double **)&h_a,n*sizeof(double));
