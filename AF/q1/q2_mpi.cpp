@@ -30,8 +30,9 @@ int main(int argc, char ** argv){
         for(int i= 0; i<size/2;i++)
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
 
-        // for(int i= size/2; i<size;i++)
-        //   MPI_Send(&serie[size/2], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
+        // comentar for abaixo caso nao tenha 3 processos
+        for(int i= size/2; i<size;i++)
+          MPI_Send(&serie[i], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
 
 
         MPI_Recv(&sum, 1, MPI_DOUBLE, 1, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
