@@ -67,7 +67,7 @@ int main(){
   env[10*size +11] = true;
   env[10*size +12] = true;
 
-  int* dEnv;
+  bool* dEnv;
 
   cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
   cudaMemcpy(dEnv, env, size * size * sizeof(bool), cudaMemcpyHostToDevice);
