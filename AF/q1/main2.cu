@@ -49,6 +49,9 @@ void print(bool* env) {
 }
 
 int main(){
+
+  int parada = 0;
+
   bool env[size * size];
 
   // srand(time(NULL));
@@ -74,11 +77,13 @@ int main(){
 
   dim3 golThreads(size, size);
 
-  while (true) {
+  while (parada < 100) {
     system("clear");
     jogo<<<1, golThreads>>>(dEnv);
     cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
     print(env);
     system("sleep .1");
+
+    parada++;
   }
 }
