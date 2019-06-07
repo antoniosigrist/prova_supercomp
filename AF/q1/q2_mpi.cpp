@@ -33,7 +33,7 @@ int main(int argc, char ** argv){
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
 
         // comentar for abaixo caso nao tenha 3 processos
-        for(int i= size/2-5; i<size;i++){
+        for(int i= size/2-2; i<size;i++){
            std::cout  << "Dado processo 2 "<< serie[i] << "\n";
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
         }
@@ -42,7 +42,7 @@ int main(int argc, char ** argv){
         MPI_Recv(&sum, 1, MPI_DOUBLE, 1, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(&sum2, 1, MPI_DOUBLE, 2, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        MPI_Wait(&request, &status);
+        //MPI_Wait(&request, &status);
 
         std::cout  << "A serie converge para "<< sum + sum2 << "\n";
 
@@ -69,7 +69,7 @@ int main(int argc, char ** argv){
 
   else if (rank == 2){
 
-        for(int i= 0; i<size/2-5;i++)
+        for(int i= 0; i<size/2-2;i++)
           MPI_Recv(&b[i], 1, MPI_DOUBLE, 0, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
           sum3 = 0.0;
