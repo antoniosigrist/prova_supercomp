@@ -11,6 +11,8 @@ int main(int argc, char ** argv){
   MPI_Init(&argc, &argv);
   double start = MPI_Wtime();
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Request request;
+  MPI_Status status;
 
   if (rank == 0) {
 
