@@ -49,25 +49,35 @@ void print(int* env) {
 }
 
 int main(){
-  int env[size * size];
+  bool env[size * size];
 
-  srand(time(NULL));
+  // srand(time(NULL));
 
-  for (int i = 0; i < size * size; i++) {
-    env[i] = rand() % 2;
-  }
+  // for (int i = 0; i < size * size; i++) {
+  //   env[i] = rand() % 2 == 0;
+  // }
+
+  env[ 5*size + 7] = true;
+  env[ 6*size + 8] = true;
+  env[ 8*size +8] = true;
+  env[ 6*size +6] = true;
+  env[ 8*size +10] = true;
+  env[ 9*size +10] = true;
+  env[ 8*size +11] = true;
+  env[10*size +11] = true;
+  env[10*size +12] = true;
 
   int* dEnv;
 
-  cudaMalloc((void**) &dEnv, size * size * sizeof(int));
-  cudaMemcpy(dEnv, env, size * size * sizeof(int), cudaMemcpyHostToDevice);
+  cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
+  cudaMemcpy(dEnv, env, size * size * sizeof(bool), cudaMemcpyHostToDevice);
 
   dim3 golThreads(size, size);
 
   while (true) {
     system("clear");
     gpuNext<<<1, golThreads>>>(dEnv);
-    cudaMemcpy(env, dEnv, size * size * sizeof(int), cudaMemcpyDeviceToHost);
+    cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
     print(env);
     system("sleep .1");
   }
