@@ -35,10 +35,11 @@ int main(int argc, char ** argv){
 
 
         MPI_Recv(&sum, 1, MPI_DOUBLE, 1, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&sum2, 1, MPI_DOUBLE, 2, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 
 
-        std::cout  << "A serie converge para "<< sum << "\n";
+        std::cout  << "A serie converge para "<< sum + sum2 << "\n";
 
        
         
@@ -60,18 +61,20 @@ int main(int argc, char ** argv){
          MPI_Send(&sum1, 1, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
   }
 
-  else{
+  else if (rank == 2){
 
         for(int i= 0; i<size/2;i++)
           MPI_Recv(&b[i], 1, MPI_DOUBLE, 0, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-        sum1 = 0.0;
+          sum1 = 0.0;
          
          for (int i=0;i< size/2;i++){
 
-            sum1 += a[i];
+          sum1 += a[i];
 
          }
+
+         MPI_Send(&sum1, 1, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
 
 
   }
