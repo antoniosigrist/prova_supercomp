@@ -43,34 +43,44 @@ __global__ void jogo(bool grid[][size]){
 }
 
 int main(){
-  bool grid[size][size] = {}; // dados iniciais
+  bool grid[size*size]; // dados iniciais
   int parada = 0;
   bool* dEnv;
 
-  // cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
-  // cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+  cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
+  cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
 
-  cudaMallocManaged((bool *)&grid,size*size*sizeof(bool));
+  //cudaMallocManaged((bool *)&grid,size*size*sizeof(bool));
 
   dim3 golThreads(size, size);
 
-  grid[ 5][ 7] = true;
-  grid[ 6][ 8] = true;
-  grid[ 8][ 8] = true;
-  grid[ 6][ 9] = true;
-  grid[ 8][10] = true;
-  grid[ 9][10] = true;
-  grid[ 8][11] = true;
-  grid[10][11] = true;
-  grid[10][12] = true;
+  // grid[ 5][ 7] = true;
+  // grid[ 6][ 8] = true;
+  // grid[ 8][ 8] = true;
+  // grid[ 6][ 9] = true;
+  // grid[ 8][10] = true;
+  // grid[ 9][10] = true;
+  // grid[ 8][11] = true;
+  // grid[10][11] = true;
+  // grid[10][12] = true;
+
+  grid[ 5*size + 7] = true;
+  grid[ 6*size + 8] = true;
+  grid[ 8*size +8] = true;
+  grid[ 6*size +6] = true;
+  grid[ 8*size +10] = true;
+  grid[ 9*size +10] = true;
+  grid[ 8*size +11] = true;
+  grid[10*size +11] = true;
+  grid[10*size +12] = true;
 
   while (parada<100) { // loop enquanto algo vivo
 
     system("clear");
 
-    jogo<<<1,golThreads>>>(grid);
+    jogo<<<1,golThreads>>>(dEnv);
 
-    //cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
+    cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
 
     print(grid);
 
