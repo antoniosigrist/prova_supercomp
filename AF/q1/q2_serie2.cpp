@@ -44,7 +44,12 @@ int main(int argc, char ** argv){
 
         //MPI_Wait(&request, &status);
 
-        std::cout  << "A serie converge para "<< sum + sum2 << "\n";
+        if (sum2 >0.5){
+          std::cout  << "Provavelmente a serie é divergente. Caso não seja, ela converge para um valor maior que: "<< sum + sum2 << "\n";
+          std::cout  << "Foram somados "<< size<< "elementos até aqui";
+        }else{
+          std::cout  << "A serie converge para "<< sum + sum2 << "\n";
+        }
 
        
         
