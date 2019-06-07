@@ -32,6 +32,10 @@ __global__ void jogo(bool grid[][size]){
           if(k != 0 || l != 0)
             if(grid_tmp[i+k][j+l])
               ++count;
+
+      __syncthreads();
+
+
       if(count < 2 || count > 3) grid[i][j] = false;
       else if(count == 3) grid[i][j] = true;
     }
@@ -43,8 +47,10 @@ int main(){
   int parada = 0;
   bool* dEnv;
 
-  cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
-  cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+  // cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
+  // cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+
+  cudaMallocManaged((bool *)&grid,size*size*sizeof(bool));
 
   dim3 golThreads(size, size);
 
@@ -62,9 +68,9 @@ int main(){
 
     system("clear");
 
-    jogo<<<1,golThreads>>>(dEnv);
+    jogo<<<1,golThreads>>>(grid);
 
-    cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
+    //cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
 
     print(grid);
 
