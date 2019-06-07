@@ -6,7 +6,7 @@
 int main(int argc, char ** argv){
 
   int rank;
-  double sum,sum1,sum2;
+  double sum,sum1,sum2,sum3;
   double serie[size],a[size/2],b[size/2];
   MPI_Init(&argc, &argv);
   double start = MPI_Wtime();
@@ -67,15 +67,15 @@ int main(int argc, char ** argv){
         for(int i= 0; i<size/2-1;i++)
           MPI_Recv(&b[i], 1, MPI_DOUBLE, 0, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-          sum1 = 0.0;
+          sum3 = 0.0;
          
          for (int i=0;i< size/2;i++){
 
-          sum1 += a[i];
+          sum3 += a[i];
 
          }
 
-         MPI_Send(&sum1, 1, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
+         MPI_Send(&sum3, 1, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
 
 
   }
