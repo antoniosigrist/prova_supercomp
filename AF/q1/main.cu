@@ -17,7 +17,7 @@ void print(bool grid[][size]){
 }
 
 // Calcula a simulacao
-__global__ bool jogo(bool grid[][size]){
+__global__ void jogo(bool grid[][size]){
   bool isAlive = false;
   bool grid_tmp[size][size] = {};
   for(unsigned int i=0; i < size; i++)
@@ -41,7 +41,7 @@ __global__ bool jogo(bool grid[][size]){
 int main(){
   bool grid[size][size] = {}; // dados iniciais
   int parada = 0;
-  int* dEnv;
+  bool* dEnv;
 
   cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
   cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
@@ -62,7 +62,7 @@ int main(){
 
     system("clear");
 
-    jogo<<<1,golThreads>>>(dEnv)
+    jogo<<<1,golThreads>>>(dEnv);
 
     cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
 
