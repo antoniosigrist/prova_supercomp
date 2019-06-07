@@ -8,7 +8,7 @@
 
 using namespace std;
 
-__global__ void gpuNext(int* env) {
+__global__ void jogo(int* env) {
   int x = threadIdx.x;
   int y = threadIdx.y;
 
@@ -40,7 +40,7 @@ __global__ void gpuNext(int* env) {
     env[y * size + x] = 1;
 }
 
-void print(int* env) {
+void print(bool* env) {
   for(int i = 0; i < size * size; i++) {
     cout << (env[i] ? '#' : ' ');
 
@@ -76,7 +76,7 @@ int main(){
 
   while (true) {
     system("clear");
-    gpuNext<<<1, golThreads>>>(dEnv);
+    jogo<<<1, golThreads>>>(dEnv);
     cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
     print(env);
     system("sleep .1");
