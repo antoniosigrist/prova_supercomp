@@ -35,21 +35,8 @@ __global__ void jogo(bool* env) {
   if (env[wrapSouth + x]) count++;
 
 
+  __syncthreads(); //garante que as threads estejam sincronizadas para realizar o calculo de vizinhos vivos
 
-  // int neighbours =
-  //   env[y * size + wrapEast] + // EAST + MIDDLE
-  //   env[y * size + wrapWest] + // WEST + MIDDLE
-
-  //   env[wrapNorth + wrapEast] + // EAST + NORTH
-  //   env[wrapNorth + wrapWest] + // WEST + NORTH
-
-  //   env[wrapSouth + wrapEast] + // EAST + SOUTH
-  //   env[wrapSouth + wrapWest] + // WEST + SOUTH
-
-  //   env[wrapNorth + x] + // MIDDLE + TOP
-  //   env[wrapSouth + x]; // MIDDLE + BOTTOM
-
-  __syncthreads();
 
   if(count < 2 || count > 3)
     env[y * size + x] = false;
@@ -71,13 +58,8 @@ int main(){
 
   int parada = 0;
 
-  bool env[size * size];
+  bool env[size * size]; //linearizei o vetor
 
-  // srand(time(NULL));
-
-  // for (int i = 0; i < size * size; i++) {
-  //   env[i] = rand() % 2 == 0;
-  // }
 
   env[ 5*size + 7] = true;
   env[ 6*size + 8] = true;
@@ -91,15 +73,15 @@ int main(){
 
   bool* dEnv;
 
-  cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
-  cudaMemcpy(dEnv, env, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+  cudaMalloc((void**) &dEnv, size * size * sizeof(bool)); //aloca vetor em cuda
+  cudaMemcpy(dEnv, env, size * size * sizeof(bool), cudaMemcpyHostToDevice); //copia o vetor para cuda
 
-  dim3 golThreads(size, size);
+  dim3 golThreads(size, size); //define tamanho das threads
 
   while (parada < 100) {
     system("clear");
-    jogo<<<1, golThreads>>>(dEnv);
-    cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
+    jogo<<<1, golThreads>>>(dEnv); //chamada do kernel
+    cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost); //copia valor do vetor de volta a cpu
     print(env);
 
     usleep(100000);
