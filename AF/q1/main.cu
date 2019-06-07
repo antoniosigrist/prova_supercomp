@@ -48,7 +48,7 @@ int main(){
   bool* dEnv;
 
   cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
-  cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+  cudaMemcpy(dEnv, grid, size * size * sizeof(bool*), cudaMemcpyHostToDevice);
 
   //cudaMallocManaged((bool *)&grid,size*size*sizeof(bool));
 
@@ -80,7 +80,7 @@ int main(){
 
     jogo<<<1,golThreads>>>(dEnv);
 
-    cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
+    cudaMemcpy(grid, dEnv, size * size * sizeof(bool*), cudaMemcpyDeviceToHost);
 
     print(grid);
 
