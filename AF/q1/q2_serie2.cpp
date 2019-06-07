@@ -1,13 +1,13 @@
 #include <iostream>
 #include <unistd.h>
 #include <mpi.h>
-#define size 40
+#define size 400
 
 int main(int argc, char ** argv){
 
   int rank;
   double sum,sum1,sum2,sum3;
-  double serie[size],a[size/2],b[size/2];
+  double serie[size],a[size/2+2],b[size/2+2];
   MPI_Init(&argc, &argv);
   double start = MPI_Wtime();
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -28,12 +28,12 @@ int main(int argc, char ** argv){
 
         }
 
-
+        //envia para 1
         for(int i= 0; i<size/2;i++)
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
 
-        // comentar for abaixo caso nao tenha 3 processos
-        for(int i= size/2-2; i<size;i++){
+        // envia para 2
+        for(int i= size/2; i<size-2;i++){
            std::cout  << "Dado processo 2 "<< serie[i] << "\n";
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
         }
