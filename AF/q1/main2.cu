@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define HEIGHT 32
-#define WIDTH 32
+#define size 21
 
 using namespace std;
 
@@ -13,15 +12,15 @@ __global__ void gpuNext(int* env) {
   int x = threadIdx.x;
   int y = threadIdx.y;
 
-  int wrapNorth = ((HEIGHT + y - 1) % HEIGHT) * WIDTH;
-  int wrapSouth = ((HEIGHT + y + 1) % HEIGHT) * WIDTH;
+  int wrapNorth = ((size + y - 1) % size) * size;
+  int wrapSouth = ((size + y + 1) % size) * size;
 
-  int wrapEast = (WIDTH + x + 1) % WIDTH;
-  int wrapWest = (WIDTH + x - 1) % WIDTH;
+  int wrapEast = (size + x + 1) % size;
+  int wrapWest = (size + x - 1) % size;
 
   int neighbours =
-    env[y * WIDTH + wrapEast] + // EAST + MIDDLE
-    env[y * WIDTH + wrapWest] + // WEST + MIDDLE
+    env[y * size + wrapEast] + // EAST + MIDDLE
+    env[y * size + wrapWest] + // WEST + MIDDLE
 
     env[wrapNorth + wrapEast] + // EAST + NORTH
     env[wrapNorth + wrapWest] + // WEST + NORTH
@@ -35,40 +34,40 @@ __global__ void gpuNext(int* env) {
   __syncthreads();
 
   if(neighbours < 2 || neighbours > 3)
-    env[y * WIDTH + x] = 0;
+    env[y * size + x] = 0;
 
   if(neighbours == 3)
-    env[y * WIDTH + x] = 1;
+    env[y * size + x] = 1;
 }
 
 void print(int* env) {
-  for(int i = 0; i < WIDTH * HEIGHT; i++) {
+  for(int i = 0; i < size * size; i++) {
     cout << (env[i] ? '#' : ' ');
 
-    if (!(i % WIDTH)) cout << endl;
+    if (!(i % size)) cout << endl;
   }
 }
 
 int main(){
-  int env[WIDTH * HEIGHT];
+  int env[size * size];
 
   srand(time(NULL));
 
-  for (int i = 0; i < WIDTH * HEIGHT; i++) {
+  for (int i = 0; i < size * size; i++) {
     env[i] = rand() % 2;
   }
 
   int* dEnv;
 
-  cudaMalloc((void**) &dEnv, WIDTH * HEIGHT * sizeof(int));
-  cudaMemcpy(dEnv, env, WIDTH * HEIGHT * sizeof(int), cudaMemcpyHostToDevice);
+  cudaMalloc((void**) &dEnv, size * size * sizeof(int));
+  cudaMemcpy(dEnv, env, size * size * sizeof(int), cudaMemcpyHostToDevice);
 
-  dim3 golThreads(WIDTH, HEIGHT);
+  dim3 golThreads(size, size);
 
   while (true) {
     system("clear");
     gpuNext<<<1, golThreads>>>(dEnv);
-    cudaMemcpy(env, dEnv, WIDTH * HEIGHT * sizeof(int), cudaMemcpyDeviceToHost);
+    cudaMemcpy(env, dEnv, size * size * sizeof(int), cudaMemcpyDeviceToHost);
     print(env);
     system("sleep .1");
   }
