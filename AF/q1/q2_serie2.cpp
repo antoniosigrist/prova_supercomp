@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <mpi.h>
-#define size 10000
+#define size 100000
 
 int main(int argc, char ** argv){
 
