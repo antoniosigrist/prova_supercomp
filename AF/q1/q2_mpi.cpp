@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <mpi.h>
-#define size 20
+#define size 30
 
 int main(int argc, char ** argv){
 
