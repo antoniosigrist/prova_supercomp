@@ -34,7 +34,6 @@ int main(int argc, char ** argv){
 
         // envia para 2
         for(int i= size/2; i<size-2;i++){
-           std::cout  << "Dado processo 2 "<< serie[i] << "\n";
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
         }
 
@@ -46,7 +45,7 @@ int main(int argc, char ** argv){
 
         if (sum2 >0.5){
           std::cout  << "Provavelmente a serie é divergente. Caso não seja, ela converge para um valor maior que: "<< sum + sum2 << "\n";
-          std::cout  << "Foram somados "<< size<< "elementos até aqui";
+          std::cout  << "Foram somados "<< size << " elementos até aqui";
         }else{
           std::cout  << "A serie converge para "<< sum + sum2 << "\n";
         }
@@ -68,7 +67,6 @@ int main(int argc, char ** argv){
 
          }
 
-          std::cout  << "Sum processo 1 "<< sum1 << "\n";
          MPI_Send(&sum1, 1, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
   }
 
@@ -84,8 +82,6 @@ int main(int argc, char ** argv){
           sum3 += b[i];
 
          }
-
-         std::cout  << "Sum processo 2 "<< sum3 << "\n";
 
          MPI_Send(&sum3, 1, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
 
