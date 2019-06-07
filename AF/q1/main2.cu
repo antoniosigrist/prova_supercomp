@@ -12,36 +12,53 @@ __global__ void jogo(bool* env) {
   int x = threadIdx.x;
   int y = threadIdx.y;
 
+  // mapeaia as bordas da posição analisada
+
   int wrapNorth = ((size + y - 1) % size) * size;
   int wrapSouth = ((size + y + 1) % size) * size;
 
   int wrapEast = (size + x + 1) % size;
   int wrapWest = (size + x - 1) % size;
 
-  int neighbours =
-    env[y * size + wrapEast] + // EAST + MIDDLE
-    env[y * size + wrapWest] + // WEST + MIDDLE
+  // conta quantos existem
+  int count = 0;
 
-    env[wrapNorth + wrapEast] + // EAST + NORTH
-    env[wrapNorth + wrapWest] + // WEST + NORTH
+  if (env[y * size + wrapEast]) count++;
+  if (env[y * size + wrapWest]) count++;
+  if (env[wrapNorth + wrapEast]) count ++;
+  if (env[wrapNorth + wrapWest]) count++;
+  if (env[wrapSouth + wrapEast]) count++;
+  if (env[wrapSouth + wrapWest]) count++;
+  if (env[wrapNorth + x]) count++;
+  if (env[wrapSouth + x]) count++;
 
-    env[wrapSouth + wrapEast] + // EAST + SOUTH
-    env[wrapSouth + wrapWest] + // WEST + SOUTH
 
-    env[wrapNorth + x] + // MIDDLE + TOP
-    env[wrapSouth + x]; // MIDDLE + BOTTOM
+
+  // int neighbours =
+  //   env[y * size + wrapEast] + // EAST + MIDDLE
+  //   env[y * size + wrapWest] + // WEST + MIDDLE
+
+  //   env[wrapNorth + wrapEast] + // EAST + NORTH
+  //   env[wrapNorth + wrapWest] + // WEST + NORTH
+
+  //   env[wrapSouth + wrapEast] + // EAST + SOUTH
+  //   env[wrapSouth + wrapWest] + // WEST + SOUTH
+
+  //   env[wrapNorth + x] + // MIDDLE + TOP
+  //   env[wrapSouth + x]; // MIDDLE + BOTTOM
 
   __syncthreads();
 
-  if(neighbours < 2 || neighbours > 3)
-    env[y * size + x] = 0;
+  if(count < 2 || count > 3)
+    env[y * size + x] = false;
 
-  if(neighbours == 3)
-    env[y * size + x] = 1;
+  if(count == 3)
+    env[y * size + x] = true;
 }
 
 void print(bool* env) {
   for(int i = 0; i < size * size; i++) {
+
     cout << (env[i] ? '#' : ' ');
 
     if (!(i % size)) cout << endl;
@@ -82,7 +99,8 @@ int main(){
     jogo<<<1, golThreads>>>(dEnv);
     cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
     print(env);
-    system("sleep .1");
+
+    usleep(100000);
 
     parada++;
   }
