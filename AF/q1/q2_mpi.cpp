@@ -31,8 +31,10 @@ int main(int argc, char ** argv){
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 1, 0, MPI_COMM_WORLD);
 
         // comentar for abaixo caso nao tenha 3 processos
-        for(int i= size/2-1; i<size;i++)
+        for(int i= size/2-1; i<size;i++){
+           std::cout  << "Dado processo 2 "<< serie[i] << "\n";
           MPI_Send(&serie[i], 1, MPI_DOUBLE, 2, 5, MPI_COMM_WORLD);
+        }
 
 
         MPI_Recv(&sum, 1, MPI_DOUBLE, 1, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
