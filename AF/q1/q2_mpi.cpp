@@ -76,7 +76,7 @@ int main(int argc, char ** argv){
          
          for (int i=0;i< size/2;i++){
 
-          sum3 += a[i];
+          sum3 += b[i];
 
          }
 

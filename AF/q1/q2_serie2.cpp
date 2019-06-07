@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <mpi.h>
-#define size 30
+#define size 40
 
 int main(int argc, char ** argv){
 
@@ -76,7 +76,7 @@ int main(int argc, char ** argv){
          
          for (int i=0;i< size/2;i++){
 
-          sum3 += a[i];
+          sum3 += b[i];
 
          }
 
