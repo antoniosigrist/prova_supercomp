@@ -78,7 +78,7 @@ int main(){
 
   dim3 golThreads(size, size); //define tamanho das threads
 
-  while (parada < 100) {
+  while (parada < 100) { //define o numero de parada para 100
     system("clear");
     jogo<<<1, golThreads>>>(dEnv); //chamada do kernel
     cudaMemcpy(env, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost); //copia valor do vetor de volta a cpu
