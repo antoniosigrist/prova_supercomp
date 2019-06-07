@@ -59,6 +59,7 @@ int main(int argc, char ** argv){
 
          }
 
+          std::cout  << "Sum processo 1 "<< sum1 << "\n";
          MPI_Send(&sum1, 1, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
   }
 
@@ -74,6 +75,8 @@ int main(int argc, char ** argv){
           sum3 += a[i];
 
          }
+
+         std::cout  << "Sum processo 2 "<< sum3 << "\n";
 
          MPI_Send(&sum3, 1, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
 
