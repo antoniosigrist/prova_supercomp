@@ -35,16 +35,18 @@ __global__ bool jogo(bool grid[][size]){
       if(count < 2 || count > 3) grid[i][j] = false;
       else if(count == 3) grid[i][j] = true;
     }
-  return isAlive;
+
 }
 
 int main(){
   bool grid[size][size] = {}; // dados iniciais
-
+  int parada = 0;
   int* dEnv;
 
   cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
   cudaMemcpy(dEnv, grid, size * size * sizeof(bool), cudaMemcpyHostToDevice);
+
+  dim3 golThreads(size, size);
 
   grid[ 5][ 7] = true;
   grid[ 6][ 8] = true;
@@ -55,8 +57,19 @@ int main(){
   grid[ 8][11] = true;
   grid[10][11] = true;
   grid[10][12] = true;
-  while (jogo(grid)) { // loop enquanto algo vivo
+
+  while (parada<100) { // loop enquanto algo vivo
+
+    system("clear");
+
+    jogo<<<1,golThreads>>>(dEnv)
+
+    cudaMemcpy(grid, dEnv, size * size * sizeof(bool), cudaMemcpyDeviceToHost);
+
     print(grid);
+
     usleep(100000);  // pausa para poder exibir no terminal
+
+    parada++;
   } 
 }
