@@ -48,6 +48,9 @@ int main(){
   bool* dEnv;
 
   cudaMalloc((void**) &dEnv, size * size * sizeof(bool));
+
+
+
   cudaMemcpy(dEnv, grid, size * size * sizeof(bool*), cudaMemcpyHostToDevice);
 
   //cudaMallocManaged((bool *)&grid,size*size*sizeof(bool));
