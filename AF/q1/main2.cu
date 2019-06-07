@@ -8,7 +8,7 @@
 
 using namespace std;
 
-__global__ void jogo(int* env) {
+__global__ void jogo(bool* env) {
   int x = threadIdx.x;
   int y = threadIdx.y;
 
